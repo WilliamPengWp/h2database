@@ -1,15 +1,16 @@
 package org.h2.test.db;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.h2.test.TestBase;
 
 /**
- * Test table hints feature
+ * SQL Server compatibility test
  */
-public class TestTableHints extends TestBase {
+public class TestCompatibilitySQLServer extends TestBase {
 
 	/**
 	 * Run just this test.
@@ -22,9 +23,14 @@ public class TestTableHints extends TestBase {
 
 	@Override
 	public void test() throws SQLException {
-		deleteDb("tableHints");
+		testTableHints();
+		testUsingIdentityAsAutoIncrementAlias();
+	}
 
-		Connection conn = getConnection("tableHints;MODE=MSSQLServer");
+	private void testTableHints() throws SQLException {
+		deleteDb("sqlserver");
+
+		Connection conn = getConnection("sqlserver;MODE=MSSQLServer");
 		Statement stat = conn.createStatement();
 
 		stat.execute("create table parent(id int primary key)");
@@ -34,6 +40,19 @@ public class TestTableHints extends TestBase {
 		assertTrue(isSupportedSyntax(stat, "select * from parent with(nolock, index = id)"));
 		assertTrue(isSupportedSyntax(stat, "select * from parent with(nolock, index(id, name))"));
 		assertTrue(isSupportedSyntax(stat, "select * from parent p with(nolock) join child ch with(nolock) on ch.parent_id = p.id"));
+	}
+
+	private void testUsingIdentityAsAutoIncrementAlias() throws SQLException {
+		Connection conn = getConnection("sqlserver;MODE=MSSQLServer");
+		Statement stat = conn.createStatement();
+
+		stat.execute("create table test(id int primary key identity, expected_id int)");
+		stat.execute("insert into test (expected_id) VALUES (1), (2), (3)");
+
+		ResultSet results = stat.executeQuery("select * from test");
+		while (results.next()) {
+			assertEquals(results.getInt("expected_id"), results.getInt("id"));
+		}
 	}
 
 	private static boolean isSupportedSyntax(Statement stat, String sql) {
