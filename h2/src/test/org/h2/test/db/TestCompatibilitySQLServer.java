@@ -53,6 +53,8 @@ public class TestCompatibilitySQLServer extends TestBase {
 		while (results.next()) {
 			assertEquals(results.getInt("expected_id"), results.getInt("id"));
 		}
+
+		assertTrue(isSupportedSyntax(stat, "create table test2 (id int primary key not null identity)"));
 	}
 
 	private static boolean isSupportedSyntax(Statement stat, String sql) {
