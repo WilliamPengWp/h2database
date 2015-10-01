@@ -5868,6 +5868,8 @@ public class Parser {
                             command.addConstraintCommand(pk);
                             if (readIf("AUTO_INCREMENT")) {
                                 parseAutoIncrement(column);
+                            } else if (database.getMode().useIdentityAsAutoIncrement && readIf("IDENTITY")) {
+                                parseAutoIncrement(column);
                             }
                         } else if (readIf("UNIQUE")) {
                             AlterTableAddConstraint unique = new AlterTableAddConstraint(

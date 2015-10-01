@@ -15,8 +15,8 @@ public class TableHints {
 		Connection conn = DriverManager.getConnection("jdbc:h2:mem:;MODE=MSSQLServer");
 		Statement stat = conn.createStatement();
 
-		stat.execute("create table parent(id int primary key, name varchar(255))");
-		stat.execute("create table child(id int primary key, name varchar(255), parent_id int, foreign key (parent_id) references public.parent(id) )");
+		stat.execute("create table parent(id int primary key identity, name varchar(255))");
+		stat.execute("create table child(id int primary key identity, name varchar(255), parent_id int, foreign key (parent_id) references public.parent(id) )");
 
 		stat.execute("insert into parent values(1, 'Thomas')");
 		stat.execute("insert into child values(1, 'John', 1)");

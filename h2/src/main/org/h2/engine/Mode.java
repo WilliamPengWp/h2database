@@ -147,6 +147,11 @@ public class Mode {
      */
     public boolean discardWithTableHints;
 
+    /**
+     * Use "IDENTITY" as an alias for "auto_increment" (SQL Server style)
+     */
+    public boolean useIdentityAsAutoIncrement;
+
     private final String name;
 
     static {
@@ -185,6 +190,7 @@ public class Mode {
         mode.swapConvertFunctionParameters = true;
         mode.supportPoundSymbolForColumnNames = true;
         mode.discardWithTableHints = true;
+        mode.useIdentityAsAutoIncrement = true;
         add(mode);
 
         mode = new Mode("MySQL");
