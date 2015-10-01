@@ -142,6 +142,11 @@ public class Mode {
      */
     public boolean supportPoundSymbolForColumnNames;
 
+    /**
+     * Discard SQLServer table hints (e.g. "SELECT * FROM table WITH (NOLOCK)")
+     */
+    public boolean discardWithTableHints;
+
     private final String name;
 
     static {
@@ -179,6 +184,7 @@ public class Mode {
         mode.allowPlusForStringConcat = true;
         mode.swapConvertFunctionParameters = true;
         mode.supportPoundSymbolForColumnNames = true;
+        mode.discardWithTableHints = true;
         add(mode);
 
         mode = new Mode("MySQL");

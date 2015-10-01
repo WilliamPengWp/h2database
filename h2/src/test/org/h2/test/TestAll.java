@@ -65,6 +65,7 @@ import org.h2.test.db.TestSpaceReuse;
 import org.h2.test.db.TestSpatial;
 import org.h2.test.db.TestSpeed;
 import org.h2.test.db.TestTableEngines;
+import org.h2.test.db.TestTableHints;
 import org.h2.test.db.TestTempTables;
 import org.h2.test.db.TestTransaction;
 import org.h2.test.db.TestTriggersConstraints;
@@ -690,6 +691,7 @@ kill -9 `jps -l | grep "org.h2.test." | cut -d " " -f 1`
         addTest(new TestSpatial());
         addTest(new TestSpeed());
         addTest(new TestTableEngines());
+        addTest(new TestTableHints());
         addTest(new TestTempTables());
         addTest(new TestTransaction());
         addTest(new TestTriggersConstraints());

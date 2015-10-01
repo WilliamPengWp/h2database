@@ -1235,6 +1235,11 @@ public class Parser {
             }
         }
         alias = readFromAlias(alias);
+
+        if (database.getMode().discardWithTableHints) {
+            discardWithTableHints();
+        }
+
         return new TableFilter(session, table, alias, rightsChecked,
                 currentSelect);
     }
@@ -1250,6 +1255,33 @@ public class Parser {
             }
         }
         return alias;
+    }
+
+    private void discardWithTableHints() {
+        if (readIf("WITH")) {
+            read("(");
+            do {
+                discardTableHint();
+            } while (readIf(","));
+            read(")");
+        }
+    }
+
+    private void discardTableHint() {
+        if (readIf("INDEX")) {
+            if (readIf("(")) {
+                do {
+                    readExpression();
+                } while (readIf(","));
+                read(")");
+            } else if (readIf("=")){
+                readExpression();
+            } else {
+                throw getSyntaxError();
+            }
+        } else {
+            readExpression();
+        }
     }
 
     private Prepared parseTruncate() {
